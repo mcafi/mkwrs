@@ -8,8 +8,121 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Xd {
-  id         BigInt   @id @default(autoincrement())
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-  content    String
+enum console_type {
+  HANDHELD
+  HOME
+  HYBRID
+}
+
+enum course_status {
+  AVAILABLE
+  UNLOCKABLE
+  DLC
+  NOT_AVAILABLE
+}
+
+enum character_status {
+  AVAILABLE
+  UNLOCKABLE
+  DLC
+  NOT_AVAILABLE
+}
+
+enum vehicle_selection {
+  NO_VEHICLE
+  VEHICLE
+  VEHICLE_PARTS
+}
+
+enum record_class {
+  CLASS150
+  CLASS200
+}
+
+enum record_type {
+  FULL
+  FLAP
+}
+
+model Console {
+  id           Int          @id @default(autoincrement())
+  name         String
+  slug         String
+  release_year Int
+  logo         String
+  photo        String
+  type         console_type
+  Game         Game?
+}
+
+model Game {
+  id                  Int                 @id @default(autoincrement())
+  title               String
+  slug                String
+  release_year        Int
+  cover               String
+  console             Console             @relation(fields: [console_id], references: [id])
+  console_id          Int                 @unique
+  courses             Course[]
+  characters_metadata CharacterMetadata[]
+}
+
+model Course {
+  id            Int           @id @default(autoincrement())
+  name          String
+  slug          String
+  icon          String
+  course_status course_status
+  game          Game          @relation(fields: [game_id], references: [id])
+  game_id       Int           @unique
+  tracks        Track[]
+}
+
+model Track {
+  id             Int      @id @default(autoincrement())
+  name           String
+  photo          String
+  lap_count      Int
+  retro_track_id Int?
+  retro_track    Track?   @relation("TrackToTrack", fields: [retro_track_id], references: [id])
+  course         Course   @relation(fields: [course_id], references: [id])
+  course_id      Int      @unique
+  track          Track[]  @relation("TrackToTrack")
+  records        Record[]
+}
+
+model Charcter {
+  id                Int                @id @default(autoincrement())
+  name              String
+  photo             String
+  CharacterMetadata CharacterMetadata?
+}
+
+model CharacterMetadata {
+  id                Int               @id @default(autoincrement())
+  character         Charcter          @relation(fields: [character_id], references: [id])
+  character_id      Int               @unique
+  game              Game              @relation(fields: [game_id], references: [id])
+  game_id           Int               @unique
+  vehicle           String
+  vehicle_selection vehicle_selection
+  speed             Int
+  acceleration      Int
+  weight            Int
+  handling          Int
+  traction          Int
+  mini_turbo        Int
+}
+
+model Record {
+  id            Int      @id @default(autoincrement())
+  time          Float
+  track         Track    @relation(fields: [track_id], references: [id])
+  track_id      Int
+  vehicle       String
+  vehicle_parts String
+  glider        String
+  time_trial    Boolean
+  date          DateTime
+  video_url     String
 }
