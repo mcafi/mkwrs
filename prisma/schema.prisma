@@ -83,11 +83,11 @@ model Course {
 }
 
 model Track {
-  id             Int              @id @default(autoincrement())
+  id             String           @id
   name           String
   photo          String
   lap_count      Int
-  retro_track_id Int?
+  retro_track_id String?
   retro_track    Track?           @relation("TrackToTrack", fields: [retro_track_id], references: [id])
   course         Course           @relation(fields: [course_id], references: [id])
   course_id      Int              @unique
@@ -96,10 +96,9 @@ model Track {
 }
 
 model Charcter {
-  id                Int                 @id @default(autoincrement())
-  name              String
-  photo             String
-  MarioKart64Record MarioKart64Record[]
+  id    Int    @id @default(autoincrement())
+  name  String
+  photo String
 }
 
 model Player {
@@ -112,7 +111,7 @@ model RecordMetadata {
   id           Int                @id @default(autoincrement())
   time         Float
   track        Track              @relation(fields: [track_id], references: [id])
-  track_id     Int
+  track_id     String
   mk_64_record MarioKart64Record?
   laps         Lap[]
 }
@@ -125,8 +124,6 @@ model MarioKart64Record {
   video_system       video_system
   // la conversione tra tempo PAL e NTSC avverrà a runtime
   time               Float
-  character          Charcter       @relation(fields: [character_id], references: [id])
-  character_id       Int
 }
 
 model Lap {
