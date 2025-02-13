@@ -50,7 +50,7 @@ enum video_system {
 }
 
 model Console {
-  id           Int          @id @default(autoincrement())
+  id           String       @id
   name         String
   slug         String
   release_year Int
@@ -61,24 +61,24 @@ model Console {
 }
 
 model Game {
-  id           Int      @id @default(autoincrement())
+  id           String   @id
   title        String
   slug         String
   release_year Int
   cover        String
   console      Console  @relation(fields: [console_id], references: [id])
-  console_id   Int      @unique
+  console_id   String   @unique
   courses      Course[]
 }
 
 model Course {
-  id            Int           @id @default(autoincrement())
+  id            String        @id
   name          String
   slug          String
   icon          String
   course_status course_status
   game          Game          @relation(fields: [game_id], references: [id])
-  game_id       Int           @unique
+  game_id       String
   tracks        Track[]
 }
 
@@ -90,7 +90,7 @@ model Track {
   retro_track_id String?
   retro_track    Track?           @relation("TrackToTrack", fields: [retro_track_id], references: [id])
   course         Course           @relation(fields: [course_id], references: [id])
-  course_id      Int              @unique
+  course_id      String
   track          Track[]          @relation("TrackToTrack")
   records        RecordMetadata[]
 }

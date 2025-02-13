@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 async function main() {
   await Promise.all([init_snes(), init_n64()]);
 
+  /*
   const gba = await prisma.console.create({
     data: {
       name: "GameBoy Advance",
@@ -83,6 +84,7 @@ async function main() {
       type: console_type.HYBRID,
     },
   });
+  */
 }
 
 main()

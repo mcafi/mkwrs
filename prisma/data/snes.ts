@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 export async function init_snes() {
   const snes = await prisma.console.create({
     data: {
+      id: "super_nintendo",
       name: "Super Nintendo Entertainment System",
       slug: "snes",
       release_year: 1990,
@@ -17,6 +18,7 @@ export async function init_snes() {
 
   const smk = await prisma.game.create({
     data: {
+      id: "super_mario_kart",
       title: "Super Mario Kart",
       slug: "smk",
       release_year: 1992,
